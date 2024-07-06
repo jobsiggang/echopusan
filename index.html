@@ -94,7 +94,7 @@
         let datas = [];
         
         async function loadCSV() {
-            const response = await fetch('법정동별_버스정거장_버스노선_지하철역_개수_인구수.csv');
+            const response = await fetch('법정동별_버스정거장수_버스노선수_지하철역수_인구수.csv');
             const text = await response.text();
             const rows = text.split('\n');
 
