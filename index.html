@@ -94,18 +94,19 @@
         let datas = [];
         
         async function loadCSV() {
-            const response = await fetch('법정동별_버스정거장_버스노선_지하철역_개수.csv');
+            const response = await fetch('법정동별_버스정거장_버스노선_지하철역_개수_인구수.csv');
             const text = await response.text();
             const rows = text.split('\n');
 
             for (let i = 1; i < rows.length; i++) {
                 const values = rows[i].split(',');
-                if (values.length < 4) continue; // 빈 줄 무시
+                if (values.length < 5) continue; // 빈 줄 무시
                 const data = {
                     'EMD_NM': values[0],
                     'busstop_cnt': values[1],
                     'busline_cnt': values[2],
-                    'subway_cnt': values[3]
+                    'subway_cnt': values[3],
+                    'popular': values[4]
                 };
                 법정동리스트.push(data['EMD_NM']);
                 datas.push(data);
@@ -120,7 +121,7 @@
             defaultOption.value = '';
             defaultOption.textContent = '동이름 선택';
             dropdown.appendChild(defaultOption);
-
+            
             법정동리스트.forEach(법정동 => {
                 const option = document.createElement('option');
                 option.value = 법정동;
@@ -140,11 +141,13 @@
                             <th>버스 정거장 개수</th>
                             <th>버스 노선 개수</th>
                             <th>지하철역 개수</th>
+                            <th>인구수</th>
                         </tr>
                         <tr>
                             <td>${district_data['busstop_cnt']}</td>
                             <td>${district_data['busline_cnt']}</td>
                             <td>${district_data['subway_cnt']}</td>
+                            <td>${district_data['popular']}</td>
                         </tr>
                     </table>
                 `;
