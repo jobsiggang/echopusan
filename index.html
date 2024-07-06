@@ -121,7 +121,7 @@
             defaultOption.value = '';
             defaultOption.textContent = '동이름 선택';
             dropdown.appendChild(defaultOption);
-            
+            console.log(법정동리스트);
             법정동리스트.forEach(법정동 => {
                 const option = document.createElement('option');
                 option.value = 법정동;
@@ -138,9 +138,9 @@
                     <h2>${district_data['EMD_NM']}교통 지수</h2>
                     <table>
                         <tr>
-                            <th>버스 정거장 개수</th>
-                            <th>버스 노선 개수</th>
-                            <th>지하철역 개수</th>
+                            <th>버스정거장수</th>
+                            <th>버스노선수</th>
+                            <th>지하철수</th>
                             <th>인구수</th>
                         </tr>
                         <tr>
@@ -175,5 +175,6 @@
         <input type="submit" value="조회">
     </form>
     <div id="result"></div>
+    <p >🍄버스라인 수는 정거장을 지나는 버스라인을 모두 합함.</p>
 </body>
 </html>
