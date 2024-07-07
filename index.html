@@ -106,7 +106,8 @@
                     'busstop_cnt': values[1],
                     'busline_cnt': values[2],
                     'subway_cnt': values[3],
-                    'popular': values[4]
+                    'popular': values[4],
+                    'grade':"계산중🥱"
                 };
                 법정동리스트.push(data['EMD_NM']);
                 datas.push(data);
@@ -142,12 +143,15 @@
                             <th>버스노선수</th>
                             <th>지하철수</th>
                             <th>인구수</th>
+                            <th>교통지수등급</th>
+
                         </tr>
                         <tr>
                             <td>${district_data['busstop_cnt']}</td>
                             <td>${district_data['busline_cnt']}</td>
                             <td>${district_data['subway_cnt']}</td>
                             <td>${district_data['popular']}</td>
+                            <td>${district_data['grade']}</td>
                         </tr>
                     </table>
                 `;
@@ -167,6 +171,10 @@
         <div class="image-container">
             <p>지하철 역 위치</p>
             <img src="subwaystation.png" alt="Subway Station">
+        </div>
+        <div class="image-container">
+            <p>인구 분포</p>
+            <img src="population.png" alt="population">
         </div>
     </div>
     <form onsubmit="event.preventDefault(); displayData();">
