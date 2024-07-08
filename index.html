@@ -94,7 +94,7 @@
         let datas = [];
         
         async function loadCSV() {
-            const response = await fetch('법정동별_버스정거장수_버스노선수_지하철역수_인구수.csv');
+            const response = await fetch('법정동별_버스정거장수_버스노선수_지하철역수_인구수_교통지수.csv');
             const text = await response.text();
             const rows = text.split('\n');
 
@@ -107,7 +107,7 @@
                     'busline_cnt': values[2],
                     'subway_cnt': values[3],
                     'popular': values[4],
-                    'grade':"계산중🥱"
+                    'grade':values[5]
                 };
                 법정동리스트.push(data['EMD_NM']);
                 datas.push(data);
