@@ -54,7 +54,7 @@
         }
         .map-container iframe {
             width: 100%;
-            height: 100%;
+            height: 90%;
             border: 2px solid #B2DFDB; /* 더 시원한 색상 */
             border-radius: 10px;
         }
@@ -221,9 +221,7 @@
     <div class="container">
         
         <div class="search-container">
-            <div class="link-container">
-                <a href="map.html"><span>🌍 전체화면으로 지도 보기</span></a>
-            </div>
+
             <form onsubmit="event.preventDefault(); displayData();">
                 <label for="법정동">🚌 동별 교통 지수 조회</label>
                 <select name="법정동" id="법정동"></select>
@@ -234,6 +232,11 @@
         </div>
 
         <div class="map-container">
+            <p ><span>🌍 위치로 조회</span> <a href="map.html"><span>➖➖➖➖전체화면➖➖➖➖</span></a></p>
+        
+               
+               
+          
             <iframe src="map.html"></iframe>
         </div>
     </div>
