@@ -135,19 +135,23 @@
             const text = await response.text();
             const rows = text.split('\n');
             console.log(rows)
+            const col_list= "EMD_NM,EMD_CD,교통지수,인구수,버스정거장수,버스노선수,지하철역수,centroid_lon,centroid_lat"
+           
+
             for (let i = 1; i < rows.length; i++) {
                 const values = rows[i].split(',');
                 if (values.length < 9) continue; // 빈 줄 무시
                 const data = {
                     'EMD_NM': values[0],
-                    'busstop_cnt': values[1],
-                    'busline_cnt': values[2],
-                    'subway_cnt': values[3],
-                    'popular': values[4],
-                    'EMD_CD': values[5],
-                    'centroid_lon': parseFloat(values[6]),
-                    'centroid_lat': parseFloat(values[7]),
-                    'grade': values[8]
+                    'EMD_CD': values[1],
+                    'grade': values[2],
+                    'popular': values[3],
+                    'busstop_cnt': values[4],
+                    'busline_cnt': values[5],
+                    'subway_cnt': values[6],
+                    'centroid_lon': parseFloat(values[7]),
+                    'centroid_lat': parseFloat(values[8])
+                   
                 };
                 법정동리스트.push(data['EMD_NM']);
                 datas.push(data);
@@ -179,18 +183,20 @@
                     <h2>${district_data['EMD_NM']} 교통 지수</h2>
                     <table>
                         <tr>
+                             <th>교통지수</th>
                             <th>버스정거장수</th>
                             <th>버스노선수</th>
                             <th>지하철수</th>
                             <th>인구수</th>
-                            <th>교통지수</th>
+                           
                         </tr>
                         <tr>
+                              <td>${district_data['grade']}</td>
                             <td>${district_data['busstop_cnt']}</td>
                             <td>${district_data['busline_cnt']}</td>
                             <td>${district_data['subway_cnt']}</td>
                             <td>${district_data['popular']}</td>
-                            <td>${district_data['grade']}</td>
+                          
                         </tr>
                     </table>
                 `;

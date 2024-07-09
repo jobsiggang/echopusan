@@ -52,28 +52,27 @@
 
             rows.forEach(row => {
                 const values = row.split(',');
-                if (values.length < 9) return; // 필수 데이터가 없는 행은 무시
-
+                if (values.length < 9) return; // 빈 줄 무시
                 const data = {
                     'EMD_NM': values[0],
-                    'busstop_cnt': values[1],
-                    'busline_cnt': values[2],
-                    'subway_cnt': values[3],
-                    'popular': values[4],
-                    'EMD_CD': values[5],
-                    'centroid_lon': parseFloat(values[6]),
-                    'centroid_lat': parseFloat(values[7]),
-                    'grade': values[8]
+                    'EMD_CD': values[1],
+                    'grade': values[2],
+                    'popular': values[3],
+                    'busstop_cnt': values[4],
+                    'busline_cnt': values[5],
+                    'subway_cnt': values[6],
+                    'centroid_lon': parseFloat(values[7]),
+                    'centroid_lat': parseFloat(values[8])
+                   
                 };
-
                 const position = {
                     content: `<div class="infowindow">
                                 <p><strong>${data['EMD_NM']}</strong></p>
+                                <p>교통지수: ${data['grade']}</p>
+                                <p>인구수: ${data['popular']}</p>
                                 <p>버스정거장수: ${data['busstop_cnt']}</p>
                                 <p>버스노선수: ${data['busline_cnt']}</p>
                                 <p>지하철역수: ${data['subway_cnt']}</p>
-                                <p>인구수: ${data['popular']}</p>
-                                <p>교통지수: ${data['grade']}</p>
                               </div>`, 
                     latlng: new kakao.maps.LatLng(data['centroid_lat'], data['centroid_lon'])  
                 };
