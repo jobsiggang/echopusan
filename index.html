@@ -6,67 +6,105 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            font-size: 2em;
-            background:  #87CEEB;
+            background: #fcfdfd; /* 밝고 시원한 배경색 */
             color: #333333;
             text-align: center;
-            padding: 20px;
+            padding: 0;
+            font-size: 40px;
+            margin: 0; /* 기본 여백 제거 */
         }
-        h1 {
-            color: #FFFFFF;
+        h1{
+            color: #00796B; /* 더 시원한 색상 */
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        span{
+            color: #00796B; /* 더 시원한 색상 */
             font-size: 1.5em;
             margin-bottom: 20px;
         }
         .container {
             display: flex;
-            justify-content: center;
+            flex-wrap: wrap;
+            justify-content: center; /* 수평 가운데 정렬 */
             gap: 20px;
             margin-bottom: 20px;
+            padding: 20px 20px; /* 좌우 패딩 추가 */
         }
         .image-container {
-            width: 25%;
+            width: 30%;
         }
         .image-container img {
-            width: 100%;
-            border: 2px solid #FFFFFF;
+            width: 90%;
+            height: 40vh; /* 고정 높이 */
+            border: 2px solid #B2DFDB; /* 더 시원한 색상 */
             border-radius: 10px;
         }
+        .link-container {
+            width: 100%;
+            text-align: center;
+            padding: 50px;
+        }
+        .map-container {
+            width: 60%;
+            min-width: 300px; /* 최소 너비 설정 */
+            height: 50vh; /* 고정 높이 */
+            margin-bottom: 20px;
+            padding: 20px; /* 여백 추가 */
+        }
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: 2px solid #B2DFDB; /* 더 시원한 색상 */
+            border-radius: 10px;
+        }
+        .search-container {
+            width: 30%;
+            align-content: center;
+            margin: 0 10px; /* 좌우 여백 설정 */
+            padding: 20px; /* 여백 추가 */
+        }
         form {
-            margin: 20px auto;
-            width: 25%;
+            width: 100%;
+            margin-top: 20px;
+            align-content: center;
+
         }
         label {
             display: block;
             margin-bottom: 10px;
-            font-size: 1.2em;
-            color: #FFFFFF;
+            font-size: 1.5em;
+            color: #00796B; /* 더 시원한 색상 */
         }
         select, input[type="submit"] {
             width: 100%;
-            padding: 10px;
+            padding: 20px; /* 패딩 추가 */
             margin-bottom: 20px;
-            border: none;
+            border: 1px solid #B2DFDB; /* 더 시원한 색상 */
             border-radius: 5px;
-            font-size: 1em;
+            font-size: 1.5em;
         }
         select {
-            background-color: #87CEFA;
-            color: #000000;
+            background-color: #E0F2F1; /* 밝고 시원한 배경색 */
+            color: #333333;
         }
         input[type="submit"] {
-            background-color: #1E90FF;
+            background-color: #00796B; /* 더 시원한 색상 */
             color: white;
             cursor: pointer;
         }
         input[type="submit"]:hover {
-            background-color: #00BFFF;
+            background-color: #004D40; /* 더 진한 색상 */
         }
         #result {
             margin-top: 20px;
-            background: rgba(255, 255, 255, 0.8);
+            width: 90%;
+
+            background: #E0F2F1; /* 밝고 시원한 배경색 */
             padding: 20px;
             border-radius: 10px;
             display: inline-block;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         table {
             width: 100%;
@@ -74,19 +112,18 @@
             margin-top: 20px;
         }
         th, td {
-            border: 1px solid #CCCCCC;
+            border: 1px solid #B2DFDB; /* 더 시원한 색상 */
             padding: 10px;
             text-align: center;
         }
         th {
-            background-color: #4682B4;
+            background-color: #00796B; /* 더 시원한 색상 */
             color: white;
         }
-        img {
-            width: 600px;
-            height: 500px;
-            display: block;
-            margin: 0 auto 20px auto;
+        .note {
+            color: #004D40; /* 더 진한 색상 */
+            font-size: 1em;
+            margin-top: 20px;
         }
     </style>
     <script>
@@ -94,20 +131,23 @@
         let datas = [];
         
         async function loadCSV() {
-            const response = await fetch('법정동별_버스정거장수_버스노선수_지하철역수_인구수_교통지수.csv');
+            const response = await fetch('data.csv');
             const text = await response.text();
             const rows = text.split('\n');
-
+            console.log(rows)
             for (let i = 1; i < rows.length; i++) {
                 const values = rows[i].split(',');
-                if (values.length < 5) continue; // 빈 줄 무시
+                if (values.length < 9) continue; // 빈 줄 무시
                 const data = {
                     'EMD_NM': values[0],
                     'busstop_cnt': values[1],
                     'busline_cnt': values[2],
                     'subway_cnt': values[3],
                     'popular': values[4],
-                    'grade':values[5]
+                    'EMD_CD': values[5],
+                    'centroid_lon': parseFloat(values[6]),
+                    'centroid_lat': parseFloat(values[7]),
+                    'grade': values[8]
                 };
                 법정동리스트.push(data['EMD_NM']);
                 datas.push(data);
@@ -136,15 +176,14 @@
             const district_data = datas.find(row => row['EMD_NM'] === selected_법정동);
             if (district_data) {
                 document.getElementById('result').innerHTML = `
-                    <h2>${district_data['EMD_NM']}교통 지수</h2>
+                    <h2>${district_data['EMD_NM']} 교통 지수</h2>
                     <table>
                         <tr>
                             <th>버스정거장수</th>
                             <th>버스노선수</th>
                             <th>지하철수</th>
                             <th>인구수</th>
-                            <th>교통지수등급</th>
-
+                            <th>교통지수</th>
                         </tr>
                         <tr>
                             <td>${district_data['busstop_cnt']}</td>
@@ -166,25 +205,42 @@
     
     <div class="container">
         <div class="image-container">
-            <p>버스정거장 위치</p>
+            <p ><span>🚐버스정류장 분포</span></p>
             <img src="busstop.png" alt="Bus Stop">
         </div>
         <div class="image-container">
-            <p>지하철 역 위치</p>
+            <p ><span>🚃 전철역 분포</span></p>
             <img src="subwaystation.png" alt="Subway Station">
         </div>
         <div class="image-container">
-            <p>인구 분포</p>
-            <img src="population.png" alt="population">
+            <p ><span>👨‍👩‍👧‍👦 인구 분포</span></p>
+            <img src="population.png" alt="Population">
         </div>
     </div>
-    <form onsubmit="event.preventDefault(); displayData();">
-        <label for="법정동">동별 교통 지수 </label>
-        <select name="법정동" id="법정동"></select>
-        <input type="submit" value="조회">
-    </form>
-    <div id="result"></div>
-    <p >🍄버스라인 수는 정거장을 지나는 버스라인을 모두 합함.</p>
-    <p>2024.5.기준</p>
+    
+    <div class="container">
+        
+        <div class="search-container">
+            <div class="link-container">
+                <a href="map.html"><span>🌍 전체화면으로 지도 보기</span></a>
+            </div>
+            <form onsubmit="event.preventDefault(); displayData();">
+                <label for="법정동">🚌 동별 교통 지수 조회</label>
+                <select name="법정동" id="법정동"></select>
+                <input type="submit" value="조회">
+            </form>
+            <div id="result"></div>
+
+        </div>
+
+        <div class="map-container">
+            <iframe src="map.html"></iframe>
+        </div>
+    </div>
+    
+
+    
+    <p class="note">🍄 버스라인 수는 정거장을 지나는 버스라인을 모두 합함.</p>
+    <p class="note">2024.7. 기준</p>
 </body>
 </html>
